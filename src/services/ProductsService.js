@@ -1,10 +1,9 @@
 import { randomUUID } from "node:crypto";
-import pool from "../db/client";
-import ClientError from "../exceptions/ClientError";
-import NotfounError from "../exceptions/NotFoundError";
+import pool from "../db/client.js";
 import InvariantError from "../exceptions/InvariantError.js";
 import { PG_ERRORS } from "../utils/postgresErrorCodes.js";
-import NotFoundError from "../exceptions/NotFoundError";
+import NotFoundError from "../exceptions/NotFoundError.js";
+import ClientError from "../exceptions/ClientError.js";
 
 export default class ProductsService {
   constructor() {

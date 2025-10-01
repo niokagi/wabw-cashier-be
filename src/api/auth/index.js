@@ -7,6 +7,7 @@ export const authPlugin = {
   version: "1.0.0",
   register: async (server) => {
     const authHandler = new AuthHandler();
+    server.route(authRoutes(authHandler));
     // let authRoutes = authRoutes(authHandler);
     // authRoutes = authRoutes.map((route) => {
     //   if (route.path === "/auth/sign-in") {
@@ -14,6 +15,5 @@ export const authPlugin = {
     //   }
     //   return route;
     // });
-    server.route(authRoutes(authHandler));
   },
 };

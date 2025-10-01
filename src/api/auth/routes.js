@@ -10,6 +10,8 @@ export const authRoutes = (handler) => [
       validate: {
         payload: SignInPayloadSchema,
       },
+      description: "Sign in a user",
+      tags: ["api", "auth"],
     },
   },
   {
@@ -21,8 +23,8 @@ export const authRoutes = (handler) => [
       validate: {
         payload: SignUpPayloadSchema,
       },
-      description: "Register a new user",
-      tags: ["api", "users"],
+      description: "Sign Up a new user",
+      tags: ["api", "auth"],
     },
   },
 ];

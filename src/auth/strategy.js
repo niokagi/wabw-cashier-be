@@ -1,4 +1,6 @@
 import HapiJwt from "@hapi/jwt";
+import "dotenv/config";
+import "@dotenvx/dotenvx/config";
 
 export const configureJwtStrategy = async (server) => {
   await server.register(HapiJwt);
@@ -9,6 +11,7 @@ export const configureJwtStrategy = async (server) => {
       aud: false,
       iss: false,
       sub: false,
+      exp: true,
     },
     validate: (artifacts, request, h) => {
       return {

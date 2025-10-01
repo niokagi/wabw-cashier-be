@@ -1,5 +1,5 @@
+import { ProductPayloadSchema } from "./validator.js";
 import Joi from "joi";
-import { ProductPayloadSchema } from "./validator";
 
 export const productsRoutes = (handler) => [
   {
@@ -7,34 +7,60 @@ export const productsRoutes = (handler) => [
     path: "/products",
     handler: handler.postProductHandler,
     options: {
-      validate: {
-        payload: ProductPayloadSchema,
-      },
+      auth: "jwt_strategy",
+      validate: { payload: ProductPayloadSchema },
+      description: "Add a new product",
+      tags: ["api", "products"],
     },
   },
-  // {
-  //   method: "GET",
-  //   path: "/products",
-  //   handler: handler.getProductHandler,
-  //   options: {
-  //     validate: {
-  //       query: Joi.object({
-  //         limit: Joi.number().integer().min(1).default(10),
-  //         offset: Joi.number().integer().min(0).default(0),
-  //       }),
-  //     },
-  //   },
-  // },
-  // {
-  //   method: "GET",
-  //   path: "/products/{id}",
-  //   handler: handler.getProductByIdHandler,
-  //   options: {
-  //     validate: {
-  //       params: Joi.object({
-  //         id: Joi.string().required(),
-  //       }),
-  //     },
-  //   },
-  // },
+  {
+    method: "GET",
+    path: "/products",
+    handler: handler.getProductsHandler,
+    options: {
+      auth: "jwt_strategy",
+      description: "Get all products",
+      tags: ["api", "products"],
+    },
+  },
+  {
+    method: "GET",
+    path: "/products/{id}",
+    handler: handler.getProductByIdHandler,
+    options: {
+      auth: "jwt_strategy",
+      validate: {
+        params: Joi.object({ id: Joi.number().integer().required() }),
+      },
+      description: "Get a product by its ID",
+      tags: ["api", "products"],
+    },
+  },
+  {
+    method: "PUT",
+    path: "/products/{id}",
+    handler: handler.putProductByIdHandler,
+    options: {
+      auth: "jwt_strategy",
+      validate: {
+        params: Joi.object({ id: Joi.number().integer().required() }),
+        payload: ProductPayloadSchema,
+      },
+      description: "Update a product by its ID",
+      tags: ["api", "products"],
+    },
+  },
+  {
+    method: "DELETE",
+    path: "/products/{id}",
+    handler: handler.deleteProductByIdHandler,
+    options: {
+      auth: "jwt_strategy",
+      validate: {
+        params: Joi.object({ id: Joi.number().integer().required() }),
+      },
+      description: "Delete a product by its ID",
+      tags: ["api", "products"],
+    },
+  },
 ];

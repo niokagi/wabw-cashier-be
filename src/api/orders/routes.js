@@ -1,7 +1,7 @@
 import trxHandler from "./handler";
 import { trxPayloadSchema } from "./validator";
 
-export const trxRoutes = () => [
+export const ordersRoutes = () => [
   {
     method: "POST",
     path: "/trx/{id}",

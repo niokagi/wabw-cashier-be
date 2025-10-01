@@ -28,12 +28,13 @@ const init = async () => {
     },
   });
 
+  await configureJwtStrategy(server);
   await server.register([
     { plugin: authPlugin },
     { plugin: usersPlugin },
     { plugin: productsPlugin },
   ]);
-  await configureJwtStrategy(server);
+
   await server.start();
   console.log(`server running on ${server.info.uri}`);
 };
