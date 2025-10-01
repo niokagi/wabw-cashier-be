@@ -3,9 +3,10 @@ import "dotenv/config";
 import "@dotenvx/dotenvx/config";
 import * as config from "./config/index.js";
 // modules import
-import users from "./api/users/index.js";
 import { authPlugin } from "./api/auth/index.js";
 import { configureJwtStrategy } from "./auth/strategy.js";
+import { productsPlugin } from "./api/products/index.js";
+import { usersPlugin } from "./api/users/index.js";
 
 const init = async () => {
   const server = Hapi.server({
@@ -29,10 +30,8 @@ const init = async () => {
 
   await server.register([
     { plugin: authPlugin },
-    { plugin: users },
-    // {
-    //   plugin: products,
-    // },
+    { plugin: usersPlugin },
+    { plugin: productsPlugin },
   ]);
   await configureJwtStrategy(server);
   await server.start();

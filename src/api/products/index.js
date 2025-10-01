@@ -1,11 +1,12 @@
-import ProductsHandler from "./handler";
-import productsRoute from "./routes";
+import ProductsHandler from "./handler.js";
+import { createProductsRoutes } from "./routes.js";
 
-export const productPlugin = {
-  name: "products",
-  version: "1.00",
+export const productsPlugin = {
+  name: "api-products",
+  version: "1.0.0",
   register: async (server) => {
     const productsHandler = new ProductsHandler();
-    // const productsService = new ProductsService();
+    const productsRoutes = createProductsRoutes(productsHandler);
+    server.route(productsRoutes);
   },
 };

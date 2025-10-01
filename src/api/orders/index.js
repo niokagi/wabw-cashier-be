@@ -1,7 +1,7 @@
 import OrdersHandler from "./handler";
 
 export const ordersPlugin = {
-  name: "api-trx",
+  name: "api-orders",
   version: "1.0.0",
   register: async (server) => {
     // to be
