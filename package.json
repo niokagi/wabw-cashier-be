@@ -1,0 +1,50 @@
+{
+  "name": "cashier-wabw-be",
+  "version": "1.0.0",
+  "description": "starter project for a Hapi.js backend with PostgreSQL.",
+  "main": "src/server.js",
+  "type": "module",
+  "bin": {
+    "hapi-pgsql-boilerplate": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "dotenvx run -- node src/server.js",
+    "dev": "dotenvx run -- nodemon src/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "migrate": "dotenvx run -- node-pg-migrate",
+    "seed": "dotenvx run -- node ./src/db/seed.js"
+  },
+  "keywords": [
+    "hapijs",
+    "postgres",
+    "backend",
+    "boilerplate"
+  ],
+  "author": "niokagi",
+  "license": "ISC",
+  "node-pg-migrate": {
+    "dir": "src/db/migrations",
+    "migrationsTable": "pgmigrations"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.51.0",
+    "@hapi/boom": "^10.0.1",
+    "@hapi/hapi": "^21.4.3",
+    "@hapi/jwt": "^3.2.1",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "node-pg-migrate": "^8.0.3",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "dotenv-cli": "^10.0.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "nodemon": "^3.1.10"
+  }
+}
