@@ -8,10 +8,10 @@ import { configureJwtStrategy } from "./auth/strategy.js";
 import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 
-const init = async () => {
+export const init = async () => {
   const server = Hapi.server({
     host: config.HOST,
-    port: config.PORT,
+    port: process.env.NODE_ENV === "test" ? 0 : config.PORT,
     routes: {
       cors: {
         origin: ["*"],
@@ -37,6 +37,9 @@ const init = async () => {
 
   await server.start();
   console.log(`server running on ${server.info.uri}`);
+  
+  // for testing units
+  return server;
 };
 
 process.on("unhandledRejection", (err) => {
