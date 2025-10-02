@@ -12,6 +12,7 @@
     "dev": "dotenvx run -- nodemon src/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "test": "lab -v --leaks",
     "migrate": "dotenvx run -- node-pg-migrate",
     "seed": "dotenvx run -- node ./src/db/seed.js"
   },
@@ -41,10 +42,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@hapi/code": "^9.0.3",
+    "@hapi/lab": "^26.0.0",
     "dotenv-cli": "^10.0.0",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^16.4.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "sinon": "^21.0.0"
   }
 }

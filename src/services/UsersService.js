@@ -5,8 +5,9 @@ import ClientError from "../exceptions/ClientError.js";
 import NotFoundError from "../exceptions/NotFoundError.js";
 
 export default class UsersService {
-  constructor() {
+  constructor(idGenerator = randomUUID) {
     this._pool = pool;
+    this._idGenerator = idGenerator;
   }
 
   async verifyNewUsername(username) {
@@ -21,21 +22,31 @@ export default class UsersService {
   }
 
   async addUser({ username, email, password }) {
-    await this.verifyNewUsername(username);
+    try {
+      await this.verifyNewUsername(username);
+      const id = `user-${this._idGenerator()}`;
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const query = {
+        text: "INSERT INTO users(id, username, email, password) VALUES($1, $2, $3, $4) RETURNING id",
+        values: [id, username, email, hashedPassword],
+      };
 
-    const id = `user-${randomUUID()}`;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const query = {
-      text: "INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id",
-      values: [id, username, email, hashedPassword],
-    };
-    const result = await this._pool.query(query);
+      const result = await this._pool.query(query);
 
-    if (!result.rows[0].id) {
-      throw new Error("failed to register");
+      if (!result.rows[0]?.id) {
+        throw new Error("failed to register");
+      }
+
+      return result.rows[0].id;
+    } catch (error) {
+      if (error instanceof ClientError) {
+        throw error;
+      }
+      if (error.code === PG_ERRORS.UNIQUE_VIOLATION) {
+        throw new InvariantError("sign up failed: email already used.");
+      }
+      throw error;
     }
-
-    return result.rows[0].id;
   }
 
   async getUserById(id) {
@@ -61,6 +72,7 @@ export default class UsersService {
   }
 
   // dev func
+  // for admin role
   // async getAllUsers({ limit, offset }) {
   //   const totalResult = await this._pool.query(
   //     "SELECT COUNT(*) AS total FROM users"
