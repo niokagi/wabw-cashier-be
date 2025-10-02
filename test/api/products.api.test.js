@@ -69,4 +69,27 @@ describe("Products API", () => {
       expect(responsePayload.data.products).to.equal(mockProducts);
     });
   });
+
+  //   get prod by id
+  describe("GET /products/{id}", () => {
+    it("should respond with 404 if product is not found", async () => {
+      const nonExistentId = 999;
+      sandbox
+        .stub(ProductsService.prototype, "getProductById")
+        .rejects(new NotFoundError("Produk tidak ditemukan"));
+
+      const res = await server.inject({
+        method: "GET",
+        url: `/products/${nonExistentId}`,
+        headers: {
+          Authorization: `Bearer ${fakeAuthToken}`,
+        },
+      });
+      const responsePayload = JSON.parse(res.payload);
+
+      expect(res.statusCode).to.equal(404);
+      expect(responsePayload.status).to.equal("fail");
+      expect(responsePayload.message).to.equal("Produk tidak ditemukan");
+    });
+  });
 });
