@@ -14,9 +14,10 @@ export const configureJwtStrategy = async (server) => {
       exp: true,
     },
     validate: (artifacts, request, h) => {
+      const { payload } = artifacts.decoded;
       return {
         isValid: true,
-        credentials: { user: artifacts.decoded.payload },
+        credentials: { user: payload, scope: payload.role },
       };
     },
   });

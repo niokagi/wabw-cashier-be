@@ -21,22 +21,27 @@ export default class UsersService {
     }
   }
 
-  async addUser({ username, email, password }) {
+  async addUser({ username, email, password, role = "CASHIER" }, requestingUserRole) {
+    if (role === 'ADMIN' && requestingUserRole !== 'SUPER_ADMIN') {
+      throw new InvariantError("only the super admin can create a admin account");
+    }
+    if (role === 'SUPER_ADMIN') {
+      throw new InvariantError("cannot craete a super admin account from API");
+    }
+
     try {
       await this.verifyNewUsername(username);
       const id = `user-${this._idGenerator()}`;
       const hashedPassword = await bcrypt.hash(password, 10);
       const query = {
-        text: "INSERT INTO users(id, username, email, password) VALUES($1, $2, $3, $4) RETURNING id",
-        values: [id, username, email, hashedPassword],
+        text: 'INSERT INTO users(id, username, email, password, role) VALUES($1, $2, $3, $4, $5) RETURNING id',
+        values: [id, username, email, hashedPassword, role],
       };
 
       const result = await this._pool.query(query);
-
       if (!result.rows[0]?.id) {
         throw new Error("failed to register");
       }
-
       return result.rows[0].id;
     } catch (error) {
       if (error instanceof ClientError) {
@@ -50,27 +55,35 @@ export default class UsersService {
   }
 
   async getUserById(id) {
-    const query = {
-      text: "SELECT id, username, email, role FROM users WHERE id = $1",
-      values: [id],
-    };
-    const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new NotFoundError("user not found");
+    try {
+      const query = {
+        text: 'SELECT id, username, email, role FROM users WHERE id = $1',
+        values: [id],
+      };
+      const result = await this._pool.query(query);
+      if (result.rowCount === 0) {
+        throw new NotFoundError('user cannot found');
+      }
+      return result.rows[0];
+    } catch (error) {
+      console.error(`Database Error in getUserById for id ${id}:`, error);
+      throw error;
     }
-    return result.rows[0];
   }
 
   async getUserByEmail(email) {
-    const query = {
-      text: "SELECT id, username, email, password, role FROM users WHERE email = $1",
-      values: [email],
-    };
-    const result = await pool.query(query);
-    return result.rows[0] || null;
+    try {
+      const query = {
+        text: 'SELECT id, username, email, password, role FROM users WHERE email = $1',
+        values: [email],
+      };
+      const result = await this._pool.query(query);
+      return result.rows[0] || null;
+    } catch (error) {
+      console.error(`Database Error in getUserByEmail for email ${email}:`, error);
+      throw error;
+    }
   }
-
   // dev func
   // for admin role
   // async getAllUsers({ limit, offset }) {

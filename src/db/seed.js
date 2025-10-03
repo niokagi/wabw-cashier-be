@@ -6,12 +6,20 @@ import pool from "./client.js";
 
 dotenv.config();
 
+// const adminUser = {
+//   id: crypto.randomUUID(),
+//   username: "adhimnio",
+//   email: "adhimnio@gmail.com",
+//   plainPassword: "omkegams666",
+//   role: "SUPER_ADMIN",
+// };
+
 const adminUser = {
   id: crypto.randomUUID(),
-  username: "adhim",
-  email: "adhim@admin.com",
-  plainPassword: "omkegams666",
-  role: "ADMIN",
+  username: "adhimnio",
+  email: "adhimnio@test.com",
+  plainPassword: "sabsgasyw51423",
+  role: "SUPER_ADMIN",
 };
 
 const productsToSeed = [
@@ -58,6 +66,10 @@ async function seedAdminUser(client) {
   console.log("Admin user seeding finished.");
 }
 
+// async function seedSuperAdmin(client){
+
+// }
+
 async function seedProducts(client) {
   console.log("Seeding products...");
   for (const product of productsToSeed) {
@@ -85,7 +97,7 @@ async function main() {
     console.log("Starting database seeding process...");
     await client.query("BEGIN");
     await seedAdminUser(client);
-    await seedProducts(client);
+    // await seedProducts(client);
     await client.query("COMMIT");
     console.log("Seeding completed successfully.");
   } catch (error) {

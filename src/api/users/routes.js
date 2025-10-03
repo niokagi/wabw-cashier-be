@@ -7,9 +7,19 @@ const userRoutes = (handler) => [
     path: "/users",
     handler: handler.postUserHandler,
     options: {
+      auth: {
+        strategy: "jwt_strategy",
+        scope: ['ADMIN', 'SUPER_ADMIN'],
+      },
       validate: {
         payload: UserPayloadSchema,
       },
+      cache: {
+        expiresIn: 30 * 1000,
+        privacy: 'private'
+      },
+      description: 'Register a new user (Admin/Super Admin only)',
+      tags: ['api', 'users'],
     },
   },
   {

@@ -1,5 +1,6 @@
-import { UserPayloadSchema } from "./validator.js";
+import Boom from '@hapi/boom';
 import ClientError from "../../exceptions/ClientError.js";
+import { UserPayloadSchema } from "./validator.js";
 
 class UsersHandler {
   constructor(service, validator) {
@@ -11,43 +12,64 @@ class UsersHandler {
     this.getAllUsers = this.getAllUsers.bind(this);
   }
 
+  // add/create user/admin
   async postUserHandler(request, h) {
     try {
-      const { username, password, fullname } = request.payload;
-      const userId = await this._service.addUser({
-        username,
-        password,
-        fullname,
-      });
-
-      return h
-        .response({
-          status: "success",
-          message: "user registered.",
-          data: {
-            userId,
-          },
-        })
-        .code(201);
+      const { role: requestingUserRole } = request.auth.credentials.user;
+      const userId = await this._service.addUser(request.payload, requestingUserRole);
+      return h.response({
+        status: 'success',
+        message: 'sign up success',
+        data: { userId },
+      }).code(201);
     } catch (error) {
       if (error instanceof ClientError) {
-        return h
-          .response({
-            status: "fail",
-            message: error.message,
-          })
-          .code(error.statusCode);
+        return Boom.boomify(error);
       }
 
-      console.error(error);
-      return h
-        .response({
-          status: "error",
-          message: "An internal server error occurred",
-        })
-        .code(500);
+      console.error('postUserHandler Error:', error);
+      return Boom.internal('Maaf, terjadi kegagalan pada server kami.');
     }
   }
+
+  // dev
+  // async postUserHandler(request, h) {
+  //   try {
+  //     const { username, password, fullname } = request.payload;
+  //     const userId = await this._service.addUser({
+  //       username,
+  //       password,
+  //       fullname,
+  //     });
+
+  //     return h
+  //       .response({
+  //         status: "success",
+  //         message: "user registered.",
+  //         data: {
+  //           userId,
+  //         },
+  //       })
+  //       .code(201);
+  //   } catch (error) {
+  //     if (error instanceof ClientError) {
+  //       return h
+  //         .response({
+  //           status: "fail",
+  //           message: error.message,
+  //         })
+  //         .code(error.statusCode);
+  //     }
+
+  //     console.error(error);
+  //     return h
+  //       .response({
+  //         status: "error",
+  //         message: "An internal server error occurred",
+  //       })
+  //       .code(500);
+  //   }
+  // }
 
   async getAllUsers(request, h) {
     try {
