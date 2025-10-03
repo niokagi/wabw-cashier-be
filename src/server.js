@@ -7,6 +7,7 @@ import { authPlugin } from "./api/auth/index.js";
 import { configureJwtStrategy } from "./auth/strategy.js";
 import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
+import { ordersPlugin } from "./api/orders/index.js";
 
 export const init = async () => {
   const server = Hapi.server({
@@ -33,6 +34,7 @@ export const init = async () => {
     { plugin: authPlugin },
     { plugin: usersPlugin },
     { plugin: productsPlugin },
+    { plugin: ordersPlugin },
   ]);
 
   await server.start();
