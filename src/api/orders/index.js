@@ -1,11 +1,12 @@
-import OrdersHandler from "./handler";
+import OrdersHandler from './handler.js';
+import { createOrdersRoutes } from './routes.js';
 
 export const ordersPlugin = {
-  name: "api-orders",
-  version: "1.0.0",
+  name: 'api-orders',
+  version: '1.0.0',
   register: async (server) => {
-    // to be
     const ordersHandler = new OrdersHandler();
-    // const ordersRoute = *new class order routes
+    const ordersRoutes = createOrdersRoutes(ordersHandler);
+    server.route(ordersRoutes);
   },
 };
