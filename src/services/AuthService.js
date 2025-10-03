@@ -4,7 +4,7 @@ import AuthenticationError from "../exceptions/AuthenticationError.js";
 
 const AUTH_ERROR_MESSAGE = "incorrect credentials given";
 
-class AuthService {
+export default class AuthService {
   constructor(usersService) {
     this._usersService = usersService;
   }
@@ -57,5 +57,3 @@ class AuthService {
     }
   }
 }
-
-export default AuthService;
