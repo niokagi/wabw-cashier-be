@@ -71,10 +71,24 @@ export default class UsersService {
     }
   }
 
+  async getUserByEmailForAuth(email) {
+    try {
+      const query = {
+        text: "SELECT * FROM users WHERE email = $1",
+        values: [email],
+      }
+      const result = await this._pool.query(query);
+      return result.rows[0] || null;
+    } catch (error) {
+      console.error(`Database Error in getUserByEmail for email ${email}:`, error);
+      throw error;
+    }
+  }
+
   async getUserByEmail(email) {
     try {
       const query = {
-        text: 'SELECT id, username, email, password, role FROM users WHERE email = $1',
+        text: 'SELECT id, username, email, role FROM users WHERE email = $1',
         values: [email],
       };
       const result = await this._pool.query(query);

@@ -16,10 +16,10 @@ const userRoutes = (handler) => [
       validate: {
         payload: UserPayloadSchema,
       },
-      cache: {
-        expiresIn: 30 * 1000,
-        privacy: 'private'
-      },
+      // cache: {
+      //   expiresIn: 30 * 1000,
+      //   privacy: 'private'
+      // },
       description: 'Register a new user (Admin/Super Admin only)',
       tags: ['api', 'users'],
     },

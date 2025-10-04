@@ -11,7 +11,7 @@ export default class AuthService {
 
   async signIn(email, password) {
     try {
-      const user = await this._usersService.getUserByEmail(email);
+      const user = await this._usersService.getUserByEmailForAuth(email);
       if (!user) {
         throw new AuthenticationError(AUTH_ERROR_MESSAGE);
       }
