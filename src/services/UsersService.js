@@ -86,20 +86,20 @@ export default class UsersService {
   }
   // dev func
   // for admin role
-  // async getAllUsers({ limit, offset }) {
-  //   const totalResult = await this._pool.query(
-  //     "SELECT COUNT(*) AS total FROM users"
-  //   );
-  //   const totalData = parseInt(totalResult.rows[0].total, 10);
+  async getAllUsers({ limit, offset }) {
+    const totalResult = await this._pool.query(
+      "SELECT COUNT(*) AS total FROM users"
+    );
+    const totalData = parseInt(totalResult.rows[0].total, 10);
 
-  //   const dataResult = await this._pool.query({
-  //     text: "SELECT id, username, email FROM users ORDER BY username ASC LIMIT $1 OFFSET $2",
-  //     values: [limit, offset],
-  //   });
+    const dataResult = await this._pool.query({
+      text: "SELECT id, username, email, role FROM users ORDER BY username ASC LIMIT $1 OFFSET $2",
+      values: [limit, offset],
+    });
 
-  //   return {
-  //     users: dataResult.rows,
-  //     totalData,
-  //   };
-  // }
+    return {
+      users: dataResult.rows,
+      totalData,
+    };
+  }
 }

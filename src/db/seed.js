@@ -6,20 +6,12 @@ import pool from "./client.js";
 
 dotenv.config();
 
-// const adminUser = {
-//   id: crypto.randomUUID(),
-//   username: "adhimnio",
-//   email: "adhimnio@gmail.com",
-//   plainPassword: "omkegams666",
-//   role: "SUPER_ADMIN",
-// };
-
 const adminUser = {
   id: crypto.randomUUID(),
-  username: "adhimnio",
-  email: "adhimnio@test.com",
-  plainPassword: "sabsgasyw51423",
-  role: "SUPER_ADMIN",
+  username: "test",
+  email: "test@test.com",
+  plainPassword: "########",
+  role: "CASHIER",
 };
 
 const productsToSeed = [

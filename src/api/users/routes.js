@@ -1,16 +1,18 @@
 import Joi from "joi";
 import { UserPayloadSchema } from "./validator.js";
 
+const ADMIN_AUTH_CONFIG = {
+  strategy: "jwt_strategy",
+  scope: ['ADMIN', 'SUPER_ADMIN'],
+}
+
 const userRoutes = (handler) => [
   {
     method: "POST",
     path: "/users",
     handler: handler.postUserHandler,
     options: {
-      auth: {
-        strategy: "jwt_strategy",
-        scope: ['ADMIN', 'SUPER_ADMIN'],
-      },
+      auth: ADMIN_AUTH_CONFIG,
       validate: {
         payload: UserPayloadSchema,
       },
@@ -27,18 +29,16 @@ const userRoutes = (handler) => [
     path: "/users",
     handler: handler.getAllUsers,
     options: {
-      // filtering role privilege for safe practice
-      //
-      // auth: {
-      //   strategy: "jwt",
-      //   scope: ["admin"],
-      // },
+      // privillege role filter
+      auth: ADMIN_AUTH_CONFIG,
       validate: {
         query: Joi.object({
           limit: Joi.number().integer().min(1).default(10),
           offset: Joi.number().integer().min(0).default(0),
         }),
       },
+      description: 'getting all users data list',
+      tags: ['api', 'users'],
     },
   },
   {
@@ -46,11 +46,14 @@ const userRoutes = (handler) => [
     path: "/users/{id}",
     handler: handler.getUserByIdHandler,
     options: {
+      auth: "jwt_strategy",
       validate: {
         params: Joi.object({
           id: Joi.string().required(),
         }),
       },
+      description: 'get user by id',
+      tags: ['api', 'users'],
     },
   },
   // u can add more route paths..
